@@ -1,0 +1,32 @@
+name: .NET Core CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+env:
+  DOTNET_VERSION: '6.0.x'
+
+jobs:
+  build:
+    name: Build and Test .NET App
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build project
+      run: dotnet build --configuration Release --no-restore
+    - name: Run application
+      run: dotnet run --project Ivanov_PR10_GIT --configuration Release
+    - name: Display output info
+      run: |
+        echo "Build completed successfully!"
+        echo "Application is ready to run"
